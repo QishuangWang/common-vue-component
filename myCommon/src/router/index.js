@@ -5,11 +5,24 @@ import HelloWorld from '@/components/HelloWorld'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld
-    }
+    },
+    {
+      path: '/myViewer',
+      name: 'myViewer',
+      component: () => import("@/views/myViewer"),
+    },
+    {
+      path: '/overflowShow',
+      name: 'overflowShow',
+      component: () => import("@/views/overflowShow"),
+    },{
+      path: '/mySteps',
+      name: 'mySteps',
+      component: () => import("@/views/mySteps"),
+    },
   ]
 })
