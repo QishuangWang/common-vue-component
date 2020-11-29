@@ -27,6 +27,10 @@ export default new Router({
       path: '/myUpLoad',
       name: 'myUpLoad',
       component: () => import("@/views/upLoad"),
+    },{
+      path: '/test',
+      name: 'test',
+      component: () => import("@/views/test"),
     },
   ]
 })
