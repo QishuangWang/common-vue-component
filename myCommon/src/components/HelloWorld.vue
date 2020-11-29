@@ -23,6 +23,9 @@
         }, {
           name: '步骤条',
           path: '/mySteps'
+        }, {
+          name: '上传加密',
+          path: '/myUpLoad'
         }]
       }
     },

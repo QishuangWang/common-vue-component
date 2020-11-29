@@ -23,6 +23,10 @@ export default new Router({
       path: '/mySteps',
       name: 'mySteps',
       component: () => import("@/views/mySteps"),
+    },{
+      path: '/myUpLoad',
+      name: 'myUpLoad',
+      component: () => import("@/views/upLoad"),
     },
   ]
 })
