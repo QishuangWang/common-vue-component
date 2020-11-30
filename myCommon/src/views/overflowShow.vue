@@ -1,14 +1,17 @@
 <template>
   <div class="box">
     <Tips :content="content" class="wid190" refName="tooltipOver"></Tips>
+    <MyUpload accept='png,jpg' sizeLimit='20KB' :numLimit='3' :multiple='true'/>
   </div>
 </template>
 
 <script>
   import Tips from '@/components/tips.vue'
+  import MyUpload from '@/components/AESfile/myUpload.vue'
   export default {
     components: {
-      Tips
+      Tips,
+      MyUpload
     },
     data() {
       return {

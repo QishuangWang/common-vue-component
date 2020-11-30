@@ -2,10 +2,6 @@
 export function dataURLtoDownload(dataurl, name) {
   let blob = dataURLtoBlob(dataurl)
   let url = URL.createObjectURL(blob)
-  // let save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
-  // save_link.href = url
-  // save_link.download = name;
-  // save_link.click()
   const a = document.createElement('a'); // 创建a标签
   a.setAttribute('download', name); // download属性
   a.setAttribute('href', url); // href链接

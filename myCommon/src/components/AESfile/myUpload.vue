@@ -1,7 +1,6 @@
 <template>
-  <el-upload ref="uploadMutiple" :limit='9' :auto-upload="false" action="Fake Action" :on-success="allHandleSuccess"
-    :on-change="handleChange" :on-exceed='overLimit' :file-list="fileList" :http-request="allUpload"
-    :before-upload="before_upload" multiple>
+  <el-upload ref="uploadMutiple" :auto-upload="false" action="Fake Action" :on-change="handleChange"
+    :file-list="fileList" :multiple='multiple' :accept="accept" :on-remove='handleRemove'>
     <el-button slot="trigger" type="primary" size="small">选取文件</el-button>
     <el-button type="primary" size="small" @click="submitUpload">上传</el-button>
   </el-upload>
@@ -17,6 +16,24 @@
   } from './tool.js'
   const baseApi = process.env.BASE_API
   export default {
+    props: {
+      accept: {
+        type: String,
+        default: 'png,jpg'
+      },
+      sizeLimit: {
+        type: String,
+        default: '10MB'
+      },
+      numLimit: {
+        type: Number,
+        default: 1
+      },
+      multiple:{
+        type:Boolean,
+        default:false
+      }
+    },
     data() {
       return {
         fileList: [],
@@ -26,21 +43,38 @@
       };
     },
     watch: {
-      'count':function(val){
-          if(val !=0 && val == this.fileList.length){
-              this.uploadData(this.upData)
-          }
+      'count': function (val) {
+        if (val != 0 && val == this.fileList.length) {
+          this.uploadData(this.upData)
+        }
+      },
+      'fileList.length':function(val){
+        if (val > this.numLimit) {
+          this.$message.warning(`文件个数不能超过${this.numLimit}个`)
+          this.fileList = []
+        }
       }
     },
+    created() {},
     methods: {
       handleChange(file, fileList) {
         this.fileList = fileList
+        this.before_upload(file)
       },
-      allHandleSuccess(file) {},
-      allUpload(files, fileList) {},
-      before_upload(file, fileList) {},
-      overLimit() {
-        this.$message.warning('文件数超出最大限制')
+      handleRemove(file, fileList){
+        this.fileList = fileList
+      },
+      before_upload(file) {
+        var testmsg = file.name.substring(file.name.lastIndexOf('.') + 1)
+        const typeCheck = this.accept.includes(testmsg)
+        const sizeCheck = this.dealSize(this.sizeLimit, file)
+        if (!typeCheck) {
+          this.$message.warning(`上传文件只能是${this.accept}格式!`)
+          this.$refs.uploadMutiple.handleRemove(file)
+        } else if (!sizeCheck) {
+          this.$message.warning(`文件大小不能超过${this.sizeLimit}!`)
+          this.$refs.uploadMutiple.handleRemove(file)
+        }
       },
       submitUpload() {
         let that = this
@@ -71,6 +105,7 @@
           this.fileList = []
           this.upData = []
           this.count = 0
+          this.$emit('successCB',res.data.data.data)
         })
       },
       // -------加密消息--------
@@ -92,6 +127,16 @@
         var index2 = filename.length;
         var type = filename.substring(index1, index2);
         return type;
+      },
+      //文件大小判断
+      dealSize(sizeLimit, file) {
+        if (sizeLimit.includes('KB')) {
+          return file.size / 1024 < parseInt(sizeLimit)
+        } else if (sizeLimit.includes('MB')) {
+          return file.size / 1024 / 1024 < parseInt(sizeLimit)
+        } else if (sizeLimit.includes('GB')) {
+          return file.size / 1024 / 1024 / 1024 < parseInt(sizeLimit)
+        }
       }
 
     }
