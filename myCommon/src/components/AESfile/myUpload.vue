@@ -1,6 +1,6 @@
 <template>
   <el-upload ref="uploadMutiple" :auto-upload="false" action="Fake Action" :on-change="handleChange"
-    :file-list="fileList" :multiple='multiple' :accept="accept" :on-remove='handleRemove'>
+    :file-list="fileList" :show-file-list='!isPhoto' :multiple='multiple' :accept="accept" :on-remove='handleRemove'>
     <el-button slot="trigger" type="primary" size="small">选取文件</el-button>
     <el-button type="primary" size="small" @click="submitUpload">上传</el-button>
   </el-upload>
@@ -17,19 +17,23 @@
   const baseApi = process.env.BASE_API
   export default {
     props: {
-      accept: {
+      accept: { //接受文件类型，字符串
         type: String,
         default: 'png,jpg'
       },
-      sizeLimit: {
+      sizeLimit: {//文件大小
         type: String,
         default: '10MB'
       },
-      numLimit: {
+      numLimit: {//文件数量
         type: Number,
         default: 1
       },
-      multiple:{
+      multiple:{//是否多选
+        type:Boolean,
+        default:false
+      },
+      isPhoto:{//是否预览类型
         type:Boolean,
         default:false
       }
@@ -39,7 +43,9 @@
         fileList: [],
         resList: [],
         count: 0,
-        upData: {}
+        upData: {},
+        photoFile:'',
+        keyFrom:{}
       };
     },
     watch: {
@@ -55,11 +61,22 @@
         }
       }
     },
-    created() {},
+    created() {
+      this.getKey()
+    },
     methods: {
       handleChange(file, fileList) {
         this.fileList = fileList
         this.before_upload(file)
+        if(this.isPhoto&& !this.multiple &&fileList.length){
+          if(fileList.length>1){
+            this.$refs.uploadMutiple.handleRemove(fileList[0])
+          }
+          this.$emit('previewCB',file)
+        }
+        if(this.isPhoto&& this.multiple &&fileList.length){
+          this.$emit('previewCB',file)
+        }
       },
       handleRemove(file, fileList){
         this.fileList = fileList
@@ -91,7 +108,7 @@
               file_name: item.name,
               file_size: item.size,
               file_ext: that.getType(item.name),
-              version: 'v1',
+              version: that.keyFrom.version,
             }
             that.upData.imgFile.push(fileItem)
             that.count++
@@ -108,17 +125,20 @@
           this.$emit('successCB',res.data.data.data)
         })
       },
+      clearFile(file){
+        this.$refs.uploadMutiple.handleRemove(file)
+      },
       // -------加密消息--------
       jiami(val) {
         let str1 = val.substring(0, 50)
-        let str2 = Encrypt(val.substring(50, 80));
+        let str2 = Encrypt(val.substring(50, 80),this.keyFrom.publicKey,this.keyFrom.privateKey);
         let str3 = val.substring(80)
         return str1 + '&gzqx' + str2 + '&gzqx' + str3
       },
       // -------解密消息--------
       jiemi(val) {
         let arr = val.split('&gzqx')
-        arr[1] = Decrypt(arr[1])
+        arr[1] = Decrypt(arr[1],this.keyFrom.publicKey,this.keyFrom.privateKey)
         return arr[0] + arr[1] + arr[2]
       },
       //获取文件后缀
@@ -137,6 +157,9 @@
         } else if (sizeLimit.includes('GB')) {
           return file.size / 1024 / 1024 / 1024 < parseInt(sizeLimit)
         }
+      },
+      getKey(){
+        this.keyFrom = JSON.parse(localStorage.getItem('myKey'))
       }
 
     }

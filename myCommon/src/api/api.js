@@ -17,3 +17,11 @@ export function myDownload(data) {
     data
   })
 }
+//获取公钥私钥
+export function getKey(data) {
+  return request({
+    url: '/api/public_login/public/getfilekeys.jsp',
+    method: 'post',
+    data
+  })
+}
