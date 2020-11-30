@@ -26,7 +26,7 @@ function base64toBlob(dataurl) {
   });
 }
 
-//url转blob
+//url转Base64
 export function urlToBase64(url) {
   return new Promise(function (resolve, reject) {
     let xhr = new XMLHttpRequest();

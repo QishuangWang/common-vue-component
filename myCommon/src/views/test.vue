@@ -4,7 +4,7 @@
 
 <script>
   import {
-    urlToBase64
+    urlToBase64,dataURLtoDownload
   } from '@/components/AESfile/tool'
   import {
     Decrypt,
@@ -25,6 +25,7 @@
       urlToBase64(this.afterSrc).then(res => {
         this.src = this.jiemi(res)
         console.log(this.src)
+        dataURLtoDownload(this.src,'123')
       })
     },
     methods: {
