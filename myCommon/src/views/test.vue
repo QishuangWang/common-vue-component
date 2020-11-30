@@ -3,7 +3,6 @@
 </template>
 
 <script>
-  import MyUpload from '@/components/AESfile/myUpload'
   import {
     urlToBase64
   } from '@/components/AESfile/tool'
@@ -12,9 +11,6 @@
     Encrypt
   } from '@/components/AESfile/AES.js'
   export default {
-    components: {
-      MyUpload
-    },
     data() {
       return {
         keyFrom: {},
