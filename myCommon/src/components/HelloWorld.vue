@@ -26,6 +26,9 @@
         }, {
           name: '上传加密',
           path: '/myUpLoad'
+        }, {
+          name: '消息推送',
+          path: '/msgPush'
         }]
       }
     },

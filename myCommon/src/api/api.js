@@ -25,3 +25,12 @@ export function getKey(data) {
     data
   })
 }
+
+//获取公钥私钥
+export function getMsg(data) {
+  return request({
+    url: '/api/yc_test/test/getmsg.jsp',
+    method: 'post',
+    data
+  })
+}

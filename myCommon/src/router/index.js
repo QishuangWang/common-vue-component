@@ -28,6 +28,10 @@ export default new Router({
       name: 'myUpLoad',
       component: () => import("@/views/upLoad"),
     },{
+      path: '/msgPush',
+      name: 'msgPush',
+      component: () => import("@/views/msgPush"),
+    },{
       path: '/test',
       name: 'test',
       component: () => import("@/views/test"),
