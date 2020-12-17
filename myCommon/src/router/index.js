@@ -35,6 +35,10 @@ export default new Router({
       path: '/test',
       name: 'test',
       component: () => import("@/views/test"),
+    },{
+      path: '/radar',
+      name: 'radar',
+      component: () => import("@/views/radar"),
     },
   ]
 })

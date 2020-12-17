@@ -29,6 +29,9 @@
         }, {
           name: '消息推送',
           path: '/msgPush'
+        }, {
+          name: '雷达扫描效果',
+          path: '/radar'
         }]
       }
     },
