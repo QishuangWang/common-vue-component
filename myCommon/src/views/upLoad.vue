@@ -43,7 +43,7 @@
       </el-col>
       <el-col :span="12">
         <div class="btns">
-          <MyUpload ref="myUpload2" accept='png,jpg,pdf,rar' sizeLimit='100KB' multiple :numLimit='5'
+          <MyUpload ref="myUpload2" accept='png,jpg,pdf,rar,docx' sizeLimit='100MB' multiple :numLimit='5'
             @successCB='handleSuccess2' />
           <p>多文件上传</p>
         </div>
